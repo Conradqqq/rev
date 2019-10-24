@@ -27,7 +27,7 @@ class AccountDaoImplUnitTest {
     private AccountDaoImpl sut;
 
     @Test
-    void gets() {
+    void findsAccount() {
         //given
         long id = 1;
         Account account = mock(Account.class);
@@ -39,6 +39,7 @@ class AccountDaoImplUnitTest {
         //then
         assertThat(result).isPresent().get().isEqualTo(account);
         verify(em).find(Account.class, id);
+        verify(em).detach(account);
         verifyNoMoreInteractions(em);
     }
 

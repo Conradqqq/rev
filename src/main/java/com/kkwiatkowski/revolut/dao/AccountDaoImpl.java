@@ -20,8 +20,9 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Optional<Account> get(long id) {
         Account account = em.find(Account.class, id);
-        em.detach(account);
-        return Optional.ofNullable(account);
+        Optional<Account> result = Optional.ofNullable(account);
+        result.ifPresent(em::detach);
+        return result;
     }
 
     @Override

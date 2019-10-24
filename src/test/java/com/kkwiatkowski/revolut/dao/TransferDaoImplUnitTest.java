@@ -14,7 +14,7 @@ import javax.persistence.EntityTransaction;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TransferDaoImplTest {
+class TransferDaoImplUnitTest {
 
     @Mock
     private EntityManager em;

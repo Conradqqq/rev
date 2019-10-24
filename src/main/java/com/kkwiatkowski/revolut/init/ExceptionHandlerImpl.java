@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.kkwiatkowski.revolut.model.dto.response.ErrorDto;
 import com.kkwiatkowski.revolut.model.exception.AccountNotFoundException;
 import com.kkwiatkowski.revolut.model.exception.InsufficientFundsException;
+import com.kkwiatkowski.revolut.model.exception.RequestValidationException;
 import spark.Request;
 import spark.Response;
 
@@ -11,9 +12,12 @@ import javax.inject.Inject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-
 public class ExceptionHandlerImpl implements ExceptionHandler {
 
+    private static final int BAD_REQUEST_STATUS = 400;
+    private static final int FORBIDDEN_STATUS = 403;
+    private static final int NOT_FOUND_STATUS = 404;
+    private static final int INTERNAL_ERROR_STATUS = 500;
     private final Gson gson;
 
     @Inject
@@ -22,22 +26,35 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
     }
 
     public void handleException(Exception exception, Request request, Response response) {
-        int status;
+        int status = getStatus(exception);
+        ErrorDto errorDto = getErrorDto(exception, status);
+        response.body(gson.toJson(errorDto));
+        response.status(status);
+    }
 
+    private int getStatus(Exception exception) {
+        int status;
         if (exception instanceof AccountNotFoundException) {
-            status = 404;
+            status = NOT_FOUND_STATUS;
         } else if (exception instanceof InsufficientFundsException) {
-            status = 403;
+            status = FORBIDDEN_STATUS;
+        } else if (exception instanceof RequestValidationException) {
+            status = BAD_REQUEST_STATUS;
         } else {
-            status = 500;
+            status = INTERNAL_ERROR_STATUS;
+        }
+        return status;
+    }
+
+    private ErrorDto getErrorDto(Exception exception, int status) {
+        ErrorDto.ErrorDtoBuilder errorDto = ErrorDto.builder()
+                .message(exception.getMessage());
+
+        if (status == INTERNAL_ERROR_STATUS) {
+            errorDto.details(getStackTrace(exception));
         }
 
-        response.status(status);
-        ErrorDto errorDto = ErrorDto.builder()
-                .message(exception.getMessage())
-                .details(status == 500 ? getStackTrace(exception) : null)
-                .build();
-        response.body(gson.toJson(errorDto));
+        return errorDto.build();
     }
 
     private String getStackTrace(Exception exception) {

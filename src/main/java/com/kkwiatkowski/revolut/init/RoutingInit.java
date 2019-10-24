@@ -37,7 +37,6 @@ final class RoutingInit {
 
     private void beforeRequestFilter(Request request, Response response) {
         response.type("application/json");
-        System.out.println(String.format("Request: %s", request.body()));
     }
 
 }

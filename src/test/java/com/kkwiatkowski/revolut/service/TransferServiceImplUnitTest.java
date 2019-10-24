@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TransferServiceImplTest {
+class TransferServiceImplUnitTest {
 
     private static final int TIMEOUT = 1000;
 

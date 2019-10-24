@@ -1,6 +1,5 @@
 package com.kkwiatkowski.revolut.init;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
@@ -18,4 +17,5 @@ public class EntityManagerProducer {
     public void close(@Disposes EntityManager entityManager) {
         entityManager.close();
     }
+
 }

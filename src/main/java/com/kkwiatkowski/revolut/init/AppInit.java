@@ -17,4 +17,5 @@ public final class AppInit {
         routingInit.initRouting();
         dataMock.mockData();
     }
+
 }

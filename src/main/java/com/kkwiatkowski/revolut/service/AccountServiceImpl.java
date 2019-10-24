@@ -23,6 +23,9 @@ public final class AccountServiceImpl implements AccountService {
     }
 
     private Supplier<AccountNotFoundException> accountNotFoundException(long id) {
-        return () -> new AccountNotFoundException(String.format(ACCOUNT_NOT_FOUND, id));
+        return () -> {
+            String message = String.format(ACCOUNT_NOT_FOUND, id);
+            return new AccountNotFoundException(message);
+        };
     }
 }

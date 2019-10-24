@@ -19,9 +19,13 @@ public class DataMock {
     void mockData() {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        em.persist(Account.builder().balance(new BigDecimal("100")).build());
-        em.persist(Account.builder().balance(new BigDecimal("200")).build());
+        em.persist(accountWithBalance(100));
+        em.persist(accountWithBalance(200));
         em.flush();
         tx.commit();
+    }
+
+    private Account accountWithBalance(int balance) {
+        return Account.builder().balance(new BigDecimal(balance)).build();
     }
 }

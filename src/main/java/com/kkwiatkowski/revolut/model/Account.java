@@ -1,26 +1,43 @@
 package com.kkwiatkowski.revolut.model;
 
-import lombok.Data;
+import com.kkwiatkowski.revolut.model.exception.InsufficientFundsException;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Entity
-@Data
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Account {
 
+    private static final String INSUFFICIENT_FUNDS = "Insufficient funds for account id %d";
+
     @Transient
-    private ReentrantLock lock = new ReentrantLock();
+    private final transient ReentrantLock lock = new ReentrantLock();
 
     @Id
-    private long id;
+    @Column
+    @GeneratedValue
+    private Long id;
 
     @Column
+    @Builder.Default
     private BigDecimal balance = BigDecimal.ZERO;
 
+    public void deposit(BigDecimal amount) {
+        balance = balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        if (balance.compareTo(amount) < 0) {
+            throw new InsufficientFundsException(String.format(INSUFFICIENT_FUNDS, id));
+        }
+        balance = balance.subtract(amount);
+    }
 
 }

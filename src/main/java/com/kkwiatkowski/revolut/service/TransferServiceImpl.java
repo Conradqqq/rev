@@ -27,8 +27,9 @@ public final class TransferServiceImpl implements TransferService {
         Account to = transfer.getTo();
         try {
             boolean fromLock = from.getLock().tryLock(TIMEOUT, TimeUnit.MILLISECONDS);
+            boolean toLock = false;
             if (fromLock) {
-                boolean toLock = to.getLock().tryLock(TIMEOUT, TimeUnit.MILLISECONDS);
+                toLock = to.getLock().tryLock(TIMEOUT, TimeUnit.MILLISECONDS);
 
                 if (toLock) {
                     from.withdraw(transfer.getAmount());
@@ -37,6 +38,10 @@ public final class TransferServiceImpl implements TransferService {
                     accountDao.merge(from, to);
                     transferDao.merge(transfer);
                 }
+            }
+
+            if (!fromLock || !toLock) {
+                throw new InternalServerException("Cannot get accounts locks");
             }
         } catch (InterruptedException e) {
             throw new InternalServerException("Interrupted exception during transfer", e);

@@ -14,9 +14,34 @@ pre-installed container/server).
 1. The code produced by you is expected to be of high quality.
 2. There are no detailed requirements, use common sense.
 
-### General principles
-1. For simplicity there are no DTO <=> DAO translators, there are only 2 accounts with 1 client that can execute internal transfers between his accounts.
+### General information
+1. For simplicity
+   1. there are no DTO <=> DAO translators
+   2. there are only 2 accounts with 1 client that can execute internal transfers between his accounts
+   3. there is no currency support
+   4. I am aware there are no integration tests to not overextend the home task deadline
 
+### How to run
+```
+mvn exec:java
+```
+
+Server runs on http://localhost:4567 with sample accounts with id's 1 and 2 which you can query.
+
+### Endpoints
+| HTTP METHOD | PATH | USAGE |
+| -----------| ------ | ------ |
+| GET | /account/{accountId} | get account information by his id | 
+| POST | /transfer | execute money transfer between 2 accounts given body as below | 
+
+Transfer request body
+```
+{
+    "from": 2,
+    "to": 1,
+    "amount": 10.00
+}
+```
 ### How to run tests
 Maven is required to run tests
 ```

@@ -24,4 +24,5 @@ public class TransferDaoImpl implements TransferDao {
         em.flush();
         tx.commit();
     }
+
 }

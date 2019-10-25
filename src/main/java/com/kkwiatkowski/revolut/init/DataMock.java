@@ -28,4 +28,5 @@ public class DataMock {
     private Account accountWithBalance(int balance) {
         return Account.builder().balance(new BigDecimal(balance)).build();
     }
+
 }

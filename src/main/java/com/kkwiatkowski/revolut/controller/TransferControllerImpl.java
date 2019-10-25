@@ -14,13 +14,14 @@ import javax.inject.Inject;
 
 public final class TransferControllerImpl implements TransferController {
 
-    private final RequestValidator<Transfer> requestValidator;
+    private static final int NO_CONTENT_STATUS = 204;
+    private final RequestValidator<TransferDto> requestValidator;
     private final AccountService accountService;
     private final TransferService transferService;
     private final Gson gson;
 
     @Inject
-    public TransferControllerImpl(RequestValidator<Transfer> requestValidator, AccountService accountService,
+    public TransferControllerImpl(RequestValidator<TransferDto> requestValidator, AccountService accountService,
                                   TransferService transferService, Gson gson) {
         this.requestValidator = requestValidator;
         this.accountService = accountService;
@@ -30,6 +31,7 @@ public final class TransferControllerImpl implements TransferController {
 
     public String transferMoney(Request request, Response response) {
         TransferDto transferDto = gson.fromJson(request.body(), TransferDto.class);
+        requestValidator.validate(transferDto);
 
         Account fromAccount = accountService.getAccount(transferDto.getFrom());
         Account toAccount = accountService.getAccount(transferDto.getTo());
@@ -40,10 +42,9 @@ public final class TransferControllerImpl implements TransferController {
                 .amount(transferDto.getAmount())
                 .build();
 
-        requestValidator.validate(transfer);
         transferService.transfer(transfer);
 
-        response.status(204);
+        response.status(NO_CONTENT_STATUS);
         return "";
     }
 }

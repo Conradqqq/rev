@@ -2,7 +2,6 @@ package com.kkwiatkowski.revolut.init;
 
 import com.kkwiatkowski.revolut.controller.AccountController;
 import com.kkwiatkowski.revolut.controller.TransferController;
-import lombok.extern.slf4j.Slf4j;
 import spark.Request;
 import spark.Response;
 
@@ -10,7 +9,6 @@ import javax.inject.Inject;
 
 import static spark.Spark.*;
 
-@Slf4j
 final class RoutingInit {
 
     private static final String ACCOUNT_URL = "/account/:id";

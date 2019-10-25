@@ -24,6 +24,11 @@ class TransferAcceptanceTest {
         RestAssured.port = DEFAULT_SPARK_PORT;
     }
 
+    @AfterAll
+    static void tearDown() {
+        Spark.stop();
+    }
+
     @Test
     void transfersMoney() {
         checkAccountBalance(TO_ID, 100.00f);

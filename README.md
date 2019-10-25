@@ -21,13 +21,6 @@ pre-installed container/server).
    3. there is no currency support
    4. I am aware there are no integration tests to not overextend the home task deadline
 
-### How to run
-```
-mvn exec:java
-```
-
-Server runs on http://localhost:4567 with sample accounts with id's 1 and 2 which you can query.
-
 ### Endpoints
 | Method | Path | Description |
 | -----------| ------ | ------ |
@@ -42,6 +35,14 @@ Transfer request body
     "amount": 10.00
 }
 ```
+
+### How to run
+```
+mvn exec:java
+```
+
+Server runs on http://localhost:4567 with sample accounts with id's 1 and 2 which you can query.
+
 ### How to run tests
 Maven is required to run tests
 ```

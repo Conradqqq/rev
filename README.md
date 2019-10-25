@@ -29,7 +29,7 @@ mvn exec:java
 Server runs on http://localhost:4567 with sample accounts with id's 1 and 2 which you can query.
 
 ### Endpoints
-| HTTP METHOD | PATH | USAGE |
+| Method | Path | Description |
 | -----------| ------ | ------ |
 | GET | /account/{accountId} | get account information by his id | 
 | POST | /transfer | execute money transfer between 2 accounts given body as below | 
